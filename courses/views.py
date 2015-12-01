@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.views.generic import ListView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, UpdateView
 from django.contrib import messages
 
 from .forms import NewCourseForm
@@ -26,6 +26,32 @@ def course_create(request):
         }
     )
 
+
+# def course_edit(request, course_id):
+#     course = get_object_or_404(Course, pk=course_id)
+#     if request.method == 'POST':
+#         form = NewCourseForm(request.POST, instance=course)
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, 'course was successfully edited.')
+#             return redirect('/')
+#     else:
+#         form = NewCourseForm(instance=course)
+#     return render(
+#         request,
+#         'course_edit.html',
+#         {
+#             "course": course,
+#             "form": form,
+#         }
+#     )
+
+
+class CourseEdit(UpdateView):
+    model = Course
+    template_name = "course_edit.html"
+    context_object_name = "form"
+    fields = '__all__'
 
 class CourseGradeView(ListView):
     model = GradeColumn
