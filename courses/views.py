@@ -46,6 +46,7 @@ def enroll_student_to_course(request, course_id, student_id):
     messages.success(request, 'The student is successfuly added.')
     return redirect('/')
 
+
 def post_student_grade(request, course_id, student_id, gradecolumn_id):
     if request.method == 'POST':
         form = GradeForm(request.POST)
@@ -66,6 +67,7 @@ def post_student_grade(request, course_id, student_id, gradecolumn_id):
         }
     )
 
+
 def instructor_view_course_stundets_announcments(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     students = Student.objects.filter(course__pk=course_id)
@@ -77,3 +79,8 @@ def instructor_view_course_stundets_announcments(request, course_id):
                       'announcments': announcments
                   }
                   )
+
+
+def course_list(request):
+    qs = Course.objects.all()
+    return render(request, "course_list.html", {"courses": qs})
