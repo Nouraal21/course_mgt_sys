@@ -228,8 +228,10 @@ def remove_student_from_course(request, course_id, student_id):
     messages.success(request, 'The student is successfuly removed.')
     return redirect(reverse('instructor_view_course_stundets_announcments', args=[course_id]))
 
-
+@login_required
 def student_can_add_course(request, course_id, student_id):
+    if not request.user.is_student():
+        raise Http404
     course = Course.objects.get(pk=course_id)
     student = Student.objects.get(pk=student_id)
     if course.student_registration_open:
@@ -269,8 +271,10 @@ class CourseEdit(UpdateView):
     context_object_name = "course"
     fields = '__all__'
 
-
+@login_required
 def list_of_courses_to_add(request):
+    if not request.user.is_student():
+        raise Http404
     qs = Course.objects.all()
     return render(
         request,
@@ -360,8 +364,10 @@ def gradecolumn_create(request, course_id):
         }
     )
 
-
+@login_required
 def student_view_course_announcments_grades(request, course_id, student_id):
+    if not request.user.is_student():
+        raise Http404
     course = get_object_or_404(Course, pk=course_id)
     student = Student.objects.get(pk=student_id)
     announcments = CourseAnnouncement.objects.filter(course__pk=course_id)
@@ -430,8 +436,10 @@ class CourseAnnouncementEdit(UpdateView):
     context_object_name = 'course_announcement'
     fields = ('name', 'comment')
 
-
+@login_required
 def student_view_course_announcments(request, course_id):
+    if not request.user.is_student():
+        raise Http404
     course = get_object_or_404(Course, pk=course_id)
     announcments = CourseAnnouncement.objects.filter(course__pk=course_id)
     return render(
